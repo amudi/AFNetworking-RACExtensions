@@ -15,6 +15,7 @@ extern NSString *const AFHTTPClientMockResponse;
 
 - (RACSignal *)mock_GET:(NSString *)path parameters:(NSDictionary *)parameters;
 - (RACSignal *)mock_POST:(NSString *)path parameters:(NSDictionary *)parameters;
+- (RACSignal *)mock_POST:(NSString *)path parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block;
 - (RACSignal *)mock_PUT:(NSString *)path parameters:(NSDictionary *)parameters;
 - (RACSignal *)mock_DELETE:(NSString *)path parameters:(NSDictionary *)parameters;
 - (RACSignal *)mock_PATCH:(NSString *)path parameters:(NSDictionary *)parameters;

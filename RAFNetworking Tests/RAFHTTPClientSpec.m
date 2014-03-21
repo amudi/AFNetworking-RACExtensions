@@ -87,6 +87,29 @@ describe(@"-rac_POST:parameters:", ^{
 	});
 });
 
+describe(@"-rac_POST:parameters:constructingBodyWithBlock:", ^{
+	it(@"should create an immutable signal", ^{
+		RACSignal *postSignal = [client rac_POST:@"http://www.example.com" parameters:nil constructingBodyWithBlock:nil];
+		expect(postSignal).notTo.beNil();
+		expect(^{
+			[postSignal performSelector:@selector(sendNext:) withObject:NSNull.null];
+		}).to.raise(NSInvalidArgumentException);
+		expect(^{
+			[postSignal performSelector:@selector(sendError:) withObject:NSNull.null];
+		}).to.raise(NSInvalidArgumentException);
+		expect(^{
+			[postSignal performSelector:@selector(sendCompleted)];
+		}).to.raise(NSInvalidArgumentException);
+	});
+	
+	it(@"should POST a path", ^{
+		[[client mock_POST:@"http://www.example.com" parameters:nil constructingBodyWithBlock:nil]subscribeNext:^(id x) {
+			expect(x).notTo.beNil();
+			expect(x).to.equal(AFHTTPClientMockResponse);
+		}];
+	});
+});
+
 describe(@"-rac_deletePath:parameters:", ^{
 	it(@"should create an immutable signal", ^{
 		RACSignal *deleteSignal = [client rac_DELETE:@"http://www.example.com" parameters:nil];

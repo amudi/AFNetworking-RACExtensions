@@ -20,6 +20,10 @@ NSString *const AFHTTPClientMockResponse = @"AFHTTPClientMockResponse";
 	return [self mock_requestPath:path parameters:parameters method:@"POST"];
 }
 
+- (RACSignal *)mock_POST:(NSString *)path parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id<AFMultipartFormData>))block {
+	return [self mock_requestPath:path parameters:parameters method:@"POST"];
+}
+
 - (RACSignal *)mock_PUT:(NSString *)path parameters:(NSDictionary *)parameters {
 	return [self mock_requestPath:path parameters:parameters method:@"PUT"];
 }

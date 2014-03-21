@@ -69,6 +69,11 @@ extern NSString * const RAFNetworkingOperationErrorKey;
 - (RACSignal *)rac_POST:(NSString *)path parameters:(NSDictionary *)parameters;
 
 /*!
+ * A convenience method to POST multipart form request. Returns a cold signal of the result.
+ */
+- (RACSignal *)rac_POST:(NSString *)path parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block;
+
+/*!
  * A convenience around -putPath:parameters:success:failure: that returns a cold signal of the
  * result.
  */

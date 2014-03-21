@@ -42,7 +42,23 @@
 	return [[self
 		rac_requestPath:path parameters:parameters method:@"POST"]
 		setNameWithFormat:@"<%@: %p> -rac_postPath: %@, parameters: %@", self.class, self, path, parameters];
+}
 
+
+- (RACSignal *)rac_POST:(NSString *)path parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+{
+	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+		NSURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:
+								 [[NSURL URLWithString:path relativeToURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:block error:nil];
+		
+		AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:nil failure:nil];
+		RACSignal* signal = [operation rac_overrideHTTPCompletionBlock];
+		[self.operationQueue addOperation:operation];
+		[signal subscribe:subscriber];
+		return [RACDisposable disposableWithBlock:^{
+			[operation cancel];
+		}];
+	}] setNameWithFormat:@"<%@: %p> -rac_multipartPostPath: %@, parameters: %@", self.class, self, path, parameters];
 }
 
 - (RACSignal *)rac_PUT:(NSString *)path parameters:(NSDictionary *)parameters {
